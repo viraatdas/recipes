@@ -1,20 +1,15 @@
-"use strict";
-
-var _electron = require("electron");
-
-var _path = _interopRequireDefault(require("path"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+import { ipcRenderer } from 'electron';
+import path from 'path';
 
 const getTeamIcon = function getTeamIcon(count = 0) {
   let countTeamIconCheck = count;
   let bgUrl = null;
-  const teamMenu = document.querySelector('#team-menu-trigger');
 
+  const teamMenu = document.querySelector('#team-menu-trigger');
   if (teamMenu) {
     teamMenu.click();
-    const icon = document.querySelector('.c-team_icon');
 
+    const icon = document.querySelector('.c-team_icon');
     if (icon) {
       bgUrl = window.getComputedStyle(icon, null).getPropertyValue('background-image');
       bgUrl = /^url\((['"]?)(.*)\1\)$/.exec(bgUrl);
@@ -29,26 +24,30 @@ const getTeamIcon = function getTeamIcon(count = 0) {
   countTeamIconCheck += 1;
 
   if (bgUrl) {
-    _electron.ipcRenderer.sendToHost('avatar', bgUrl);
+    ipcRenderer.sendToHost('avatar', bgUrl);
   } else if (countTeamIconCheck <= 5) {
     setTimeout(() => {
       getTeamIcon(countTeamIconCheck + 1);
     }, 2000);
   }
 };
-
+// c-link p-channel_sidebar__channel p-channel_sidebar__channel--unread
 const SELECTOR_CHANNELS_UNREAD = '.p-channel_sidebar__channel--unread:not(.p-channel_sidebar__channel--muted)';
 
-module.exports = Franz => {
+module.exports = (Franz) => {
   const getMessages = () => {
-    const directMessages = document.querySelectorAll(`${SELECTOR_CHANNELS_UNREAD} .p-channel_sidebar__badge, .p-channel_sidebar__link--unread`).length;
+    const directMessages = document.querySelectorAll(`${SELECTOR_CHANNELS_UNREAD} .p-channel_sidebar__badge, .p-channel_sidebar__link--unread:not([data-sidebar-link-id="Punreads"]`).length;
     const allMessages = document.querySelectorAll(SELECTOR_CHANNELS_UNREAD).length - directMessages;
+
+    // set Franz badge
     Franz.setBadge(directMessages, allMessages);
   };
-
   Franz.loop(getMessages);
+
   setTimeout(() => {
     getTeamIcon();
   }, 4000);
-  Franz.injectCSS(_path.default.join(__dirname, 'service.css'));
+
+  // inject franz.css stylesheet
+  Franz.injectCSS(path.join(__dirname, 'service.css'));
 };

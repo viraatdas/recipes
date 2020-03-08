@@ -977,5 +977,16 @@
       "png": "https://cdn.jsdelivr.net/gh/getferdi/recipes/uncompressed/github_entreprise/icon.png",
       "svg": "https://cdn.jsdelivr.net/gh/getferdi/recipes/uncompressed/github_entreprise/icon.svg"
     }
+  },
+  {
+    "author": "Ferdi Team",
+    "featured": false,
+    "id": "test-invalid-pr",
+    "name": "Test: Invalid PR",
+    "version": "1.1.1",
+    "icons": {
+      "png": "https://cdn.jsdelivr.net/gh/getferdi/recipes/uncompressed/test-invalid-pr/icon.png",
+      "svg": "https://cdn.jsdelivr.net/gh/getferdi/recipes/uncompressed/test-invalid-pr/icon.svg"
+    }
   }
 ]
